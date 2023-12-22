@@ -12,19 +12,22 @@ import MapKit
 struct LocationView: View {
     
     @EnvironmentObject private var vm : LocationsViewModel
-    @State private var mapRegion : MKCoordinateRegion = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 41.9009, longitude: 12.4833),
-        span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1))
+    let maxWidthForIpad : CGFloat = 700
     
     var body: some View {
         ZStack {
             mapLayer
                 .ignoresSafeArea()
             VStack(spacing : 0 ) {
-                header.padding()
+                header
+                    .padding()
+                    .frame(maxWidth: maxWidthForIpad)
                 Spacer()
                 previewOfLocation
             }
+        }
+        .sheet(item: $vm.sheetLocation, onDismiss: nil) { location in
+            LocationDetailView(location: location)
         }
     }
 }
@@ -34,6 +37,7 @@ struct LocationView: View {
         .environmentObject(LocationsViewModel())
 }
 
+
 extension LocationView {
     
     private var header : some View {
@@ -41,15 +45,15 @@ extension LocationView {
             Button(action: vm.toggleLocationsList) {
                 Text(vm.mapLocation.name + ", " + vm.mapLocation.cityName)
                     .font(.title2)
-                    .fontWeight(.black)
-                    .foregroundStyle(.black)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color("Text"))
                     .frame(height: 55)
                     .animation(.none, value: vm.mapLocation)
                 .frame(maxWidth: .infinity)
                 .overlay(alignment: .leading) {
                     Image(systemName: "arrow.down")
                         .font(.headline)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(Color("Text"))
                         .padding()
                         .rotationEffect(Angle(degrees: vm.showLocationList ? -180 : 0))
                 }
@@ -83,6 +87,8 @@ extension LocationView {
         })
     }
     
+    
+    
     private var previewOfLocation : some View {
         ZStack {
             ForEach(vm.locations) { location in
@@ -90,6 +96,8 @@ extension LocationView {
                     LocationPreviewView(location: location)
                         .shadow(color: .black.opacity(0.3), radius: 20)
                         .padding()
+                        .frame(maxWidth: maxWidthForIpad)
+                        .frame(maxWidth: .infinity)
                         .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .bottom)))
                 }
                 

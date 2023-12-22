@@ -31,7 +31,7 @@ struct LocationsListView: View {
 }
 
 #Preview {
-    LocationView()
+    LocationsListView()
         .environmentObject(LocationsViewModel())
 }
 
@@ -49,8 +49,10 @@ extension LocationsListView {
             VStack(alignment: .leading) {
                 Text(location.name)
                     .font(.headline)
+                    .foregroundStyle(Color("Text"))
                 Text(location.cityName)
                     .font(.subheadline)
+                    .foregroundStyle(Color("Text"))
             }.frame(maxWidth: .infinity, alignment: .leading)
             
         }
