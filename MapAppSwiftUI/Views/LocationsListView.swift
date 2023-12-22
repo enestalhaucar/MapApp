@@ -14,17 +14,24 @@ struct LocationsListView: View {
     var body: some View {
         List {
             ForEach(vm.locations) { location in
-                listRowFunc(location: location)
-                    .padding(.vertical, 4)
-                    .listRowBackground(Color.clear)
-            }.listStyle(PlainListStyle())
+                Button(action: {
+                    vm.showNextLocation(location: location)
+                }, label: {
+                    listRowFunc(location: location)
+                })
+                .padding(.vertical, 4)
+                .listRowBackground(Color.clear)
+                    
+            }
             
         }
+        .frame(height: 400)
+        .listStyle(PlainListStyle())
     }
 }
 
 #Preview {
-    LocationsListView()
+    LocationView()
         .environmentObject(LocationsViewModel())
 }
 
